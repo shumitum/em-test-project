@@ -1,16 +1,29 @@
 package com.effectivemobile.testproject;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
+import com.effectivemobile.testproject.auth.AuthRequest;
+import com.effectivemobile.testproject.auth.AuthService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Task Management System API", version = "1.0", description = "Documentation \"Task Management System API\" v1.0"))
 public class TestProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TestProjectApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TestProjectApplication.class, args);
+    }
 
+    @Bean
+    public CommandLineRunner commandLineRunner(
+            AuthService authService
+    ) {
+        return args -> {
+            AuthRequest userRequest = AuthRequest.builder()
+                    .email("mail@mail.com")
+                    .password("123456")
+                    .build();
+            System.out.println("User token: " + authService.authenticate(userRequest).getToken());
+        };
+    }
 }

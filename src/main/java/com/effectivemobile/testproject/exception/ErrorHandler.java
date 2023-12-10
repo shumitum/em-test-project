@@ -44,6 +44,18 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(final Exception exc, HttpServletRequest request) {
+        log.warn("Получен статус 500 INTERNAL SERVER ERROR {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .message(exc.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
+                .build();
+    }
+
 /*    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchElementException(final NoSuchElementException e) {
