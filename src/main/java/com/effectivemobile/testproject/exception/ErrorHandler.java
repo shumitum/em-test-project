@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -45,6 +46,30 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException exc, HttpServletRequest request) {
+        log.warn("Получен статус 403 FORBIDDEN {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .message(exc.getMessage())
+                .status(HttpStatus.FORBIDDEN.toString())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleSignatureException(final SignatureException exc, HttpServletRequest request) {
+        log.warn("Получен статус 401 UNAUTHORIZED {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .message(exc.getMessage())
+                .status(HttpStatus.UNAUTHORIZED.toString())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
+                .build();
+    }
+
+/*    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception exc, HttpServletRequest request) {
         log.warn("Получен статус 500 INTERNAL SERVER ERROR {}", exc.getMessage());
@@ -54,7 +79,7 @@ public class ErrorHandler {
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
                 .build();
-    }
+    }*/
 
 /*    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)

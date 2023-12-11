@@ -2,16 +2,15 @@ package com.effectivemobile.testproject.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @Entity
@@ -41,13 +40,14 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority((role.name())));
+        return role.getAuthorities();
     }
 
     @Override

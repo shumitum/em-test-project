@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers(WHITE_LIST_URL)
                         .permitAll()
-                        .requestMatchers("/user/**").hasAnyRole(EXECUTOR.name(), MANAGER.name())
+                        .requestMatchers("/**").hasAnyRole(EXECUTOR.name(), MANAGER.name())
                         .anyRequest()
                         .authenticated()
                 )

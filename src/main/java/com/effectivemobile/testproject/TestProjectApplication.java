@@ -23,7 +23,7 @@ public class TestProjectApplication {
                     .email("mail@mail.com")
                     .password("123456")
                     .build();
-            System.out.println("User token: " + authService.authenticate(userRequest).getToken());
+            System.out.println("AUTHORIZATION TOKEN: " + authService.authenticate(userRequest).getToken());
         };
     }
 }

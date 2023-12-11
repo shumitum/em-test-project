@@ -16,4 +16,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("Пользователя с почтой %s не существует", email)));
     }
+
+    @Override
+    public User getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("Пользователя с ID=%d не существует", userId)));
+    }
 }

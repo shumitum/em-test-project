@@ -25,7 +25,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/{userId}/comments")
+@RequestMapping("/comments")
 @Tag(name = "КОММЕНТАРИИ", description = "API для работы с комментариями")
 public class CommentController {
     private final CommentService commentService;
