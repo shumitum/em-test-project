@@ -1,0 +1,28 @@
+server:
+  port:8080
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/ewm_main
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
+
+#jwt:
+#  secret: 9erg1df9bi034rge9ug0342p4j3v3j34gr35frd32gf324t2423edv56h4e
+#  lifetime: 20m
+
+jwt:
+  secret-key: 99erg1df9bi034rge9ug0342p4j3v3j34gr35frd32gf324t2423edv56h4e
+  expiration: 60m

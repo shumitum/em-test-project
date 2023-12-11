@@ -41,7 +41,7 @@ public class TaskController {
     public ViewTaskDto createTask(@Parameter(description = "ID пользователя создающего задачу") @PathVariable @Positive Integer userId,
                                   @Parameter(description = "Данные новой задачи")
                                   @RequestBody @Valid CreateTaskDto createTaskDto) {
-        return new ViewTaskDto(1, "заголовок", "описание", TaskStatus.CREATED, TaskPriority.MEDIUM, new User(userId, "имя", UserPosition.MANAGER), new User());
+        return new ViewTaskDto(1, "заголовок", "описание", TaskStatus.CREATED, TaskPriority.MEDIUM, new User(), new User());
     }
 
 

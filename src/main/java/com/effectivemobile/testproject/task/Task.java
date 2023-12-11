@@ -32,12 +32,12 @@ public class Task {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "task_status")
+    @Column(name = "status")
     @NotNull(groups = Update.class)
     private TaskStatus taskStatus = TaskStatus.CREATED;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "task_priority")
+    @Column(name = "priority")
     @NotNull(groups = Update.class)
     private TaskPriority taskPriority;
 
