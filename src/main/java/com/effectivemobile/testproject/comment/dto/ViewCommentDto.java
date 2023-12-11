@@ -1,6 +1,6 @@
 package com.effectivemobile.testproject.comment.dto;
 
-import com.effectivemobile.testproject.user.UserDto;
+import com.effectivemobile.testproject.user.dto.ViewUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +15,6 @@ import java.time.LocalDateTime;
 public class ViewCommentDto {
 
     private String text;
-    private UserDto commentator;
+    private ViewUserDto commentator;
     private LocalDateTime created;
 }

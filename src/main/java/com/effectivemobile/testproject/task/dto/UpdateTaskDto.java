@@ -22,8 +22,5 @@ public class UpdateTaskDto {
     private TaskPriority taskPriority;
 
     @Positive
-    private Integer authorId;
-
-    @Positive
     private Integer executorId;
 }
