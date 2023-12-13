@@ -8,6 +8,5 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class AuthResponse {
-    //@JsonProperty("token")
     private String token;
 }

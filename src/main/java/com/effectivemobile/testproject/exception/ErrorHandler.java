@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Slf4j
@@ -69,6 +71,31 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoSuchElementException(final NoSuchElementException exc, HttpServletRequest request) {
+        log.warn("Получен статус 404 NOT FOUND {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .message(exc.getMessage())
+                .status(HttpStatus.NOT_FOUND.toString())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleHttpMessageNotReadableException(final HttpMessageNotReadableException exc, HttpServletRequest request) {
+        log.warn("Получен статус 400 BAD REQUEST {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .message(exc.getMessage())
+                .status(HttpStatus.BAD_REQUEST.toString())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
+                .build();
+    }
+
+
 /*    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception exc, HttpServletRequest request) {
@@ -81,12 +108,7 @@ public class ErrorHandler {
                 .build();
     }*/
 
-/*    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNoSuchElementException(final NoSuchElementException e) {
-        log.warn("Получен статус 404 NOT FOUND {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
+/*
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)

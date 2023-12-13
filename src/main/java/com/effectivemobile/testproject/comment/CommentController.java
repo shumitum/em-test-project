@@ -3,6 +3,7 @@ package com.effectivemobile.testproject.comment;
 import com.effectivemobile.testproject.comment.dto.CreateCommentDto;
 import com.effectivemobile.testproject.comment.dto.UpdateCommentDto;
 import com.effectivemobile.testproject.comment.dto.ViewCommentDto;
+import com.effectivemobile.testproject.user.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,12 +14,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Slf4j
@@ -35,35 +35,34 @@ public class CommentController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Комментарий создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Comment.class))}),
+                            schema = @Schema(implementation = ViewCommentDto.class))}),
             @ApiResponse(responseCode = "400", description = "Запрос составлен некорректно", content = @Content)
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTask(@PathVariable @Positive Integer userId,
-                           @RequestBody @Valid CreateCommentDto createCommentDto) {
+    public void createComment(@AuthenticationPrincipal User user,
+                              @RequestBody @Valid CreateCommentDto createCommentDto) {
 
     }
 
     @PatchMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateComment(@PathVariable @Positive Integer userId,
-                              @RequestBody @Valid UpdateCommentDto updateCommentDto) {
+    public void updateComment(@PathVariable @Positive Integer commentId,
+                              @RequestBody @Valid UpdateCommentDto updateCommentDto,
+                              @AuthenticationPrincipal User user) {
 
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(@PathVariable @Positive Integer userId,
-                              @PathVariable @Positive Integer commentId) {
+    public void deleteComment(@PathVariable @Positive Integer commentId,
+                              @AuthenticationPrincipal User user) {
 
     }
 
-    @GetMapping("/{taskId}")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ViewCommentDto> getCommentsByTaskId(@PathVariable @Positive Integer userId,
-                                                    @PathVariable @Positive Integer taskId,
-                                                    @ParameterObject Pageable pageable) {
+    public List<ViewCommentDto> getCommentsByTaskId(@RequestParam @Positive Integer taskId) {
 
         return null;
     }

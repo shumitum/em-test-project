@@ -11,6 +11,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@Schema(description = "Информация для создания задачи")
 public class CreateTaskDto {
     @NotBlank
     @Size(max = 50)

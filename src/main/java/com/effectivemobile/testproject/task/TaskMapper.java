@@ -7,10 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface TaskMapper {
-
     ViewTaskDto toViewTaskDto(Task task);
 
     Task toTask(CreateTaskDto createTaskDto);
-
-
 }

@@ -18,7 +18,8 @@ create table if not exists users
 insert into users (name, position, email, password, role)
 values
 ('Junior', 'DEV_JUNIOR', 'mail@mail.com', '$2a$12$vvyPgGAIbAimA/a1ShcKQubp/DlKmmspN/CaUA4CQq7K84PoaLSam', 'EXECUTOR'),
-('David', 'DEV_SENIOR', 'user@user.com', '$2a$12$vvyPgGAIbAimA/a1ShcKQubp/DlKmmspN/CaUA4CQq7K84PoaLSam', 'MANAGER');
+('David', 'DEV_SENIOR', 'user@user.com', '$2a$12$vvyPgGAIbAimA/a1ShcKQubp/DlKmmspN/CaUA4CQq7K84PoaLSam', 'MANAGER'),
+('Maria', 'DEV_MIDDLE', 'user@mail.com', '$2a$12$vvyPgGAIbAimA/a1ShcKQubp/DlKmmspN/CaUA4CQq7K84PoaLSam', 'EXECUTOR');
 
 create table if not exists tasks
 (

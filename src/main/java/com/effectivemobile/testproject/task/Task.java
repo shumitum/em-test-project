@@ -48,10 +48,4 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "executor_id", referencedColumnName = "user_id")
     private User executor;
-
-/*    @OneToMany
-    @JoinTable(name = "comments",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<Comment> comments;*/
 }

@@ -2,9 +2,9 @@ package com.effectivemobile.testproject.task;
 
 import com.effectivemobile.testproject.task.dto.CreateTaskDto;
 import com.effectivemobile.testproject.task.dto.UpdateTaskDto;
-import com.effectivemobile.testproject.task.dto.UpdateTaskStatusDto;
 import com.effectivemobile.testproject.task.dto.ViewTaskDto;
 import com.effectivemobile.testproject.user.User;
+import com.effectivemobile.testproject.utility.AuthorOrExecutor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,15 +43,14 @@ public class TaskController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ViewTaskDto createTask(@Parameter(description = "Данные новой задачи")
-                                  @RequestBody @Valid CreateTaskDto createTaskDto,
+    public ViewTaskDto createTask(@RequestBody @Valid CreateTaskDto createTaskDto,
                                   @AuthenticationPrincipal User user) {
         log.info("Запрос на создание новой задачи {} от пользователя с ID={}", createTaskDto, user.getId());
         return taskService.createTask(user.getId(), createTaskDto);
     }
 
     @Operation(summary = "Редактирование задачи", description = "Пользователь может отредактировать задачу если он" +
-            " является её владельцем, задача находится в стадии 'Создана', и не принята исполнителем в работу.")
+            " является её владельцем, задача находится в статусе 'Создано', и не принята исполнителем в работу.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Задача отредактирована",
                     content = {@Content(mediaType = "application/json",
@@ -60,32 +59,32 @@ public class TaskController {
     })
     @PatchMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
-    public ViewTaskDto updateTask(@Parameter(description = "ID редактируемой задачи")
+    public ViewTaskDto updateTask(@Parameter(description = "ID обновляемой задачи")
                                   @PathVariable @Positive Integer taskId,
-                                  @Parameter(description = "Отредактированные данные задачи")
                                   @RequestBody @Valid UpdateTaskDto updateTaskDto,
                                   @AuthenticationPrincipal User user) {
         log.info("Запрос на редактирование задачи по ID={}", taskId);
-        return taskService.updateTaskById(taskId, updateTaskDto);
+        return taskService.updateTaskById(taskId, user.getId(), updateTaskDto);
     }
 
     @Operation(summary = "Смена статуса задачи", description = "Пользователь может поменять статус задачи если он" +
-            " является её исполнителем, и задача не отменена автором.")
+            " является её исполнителем, и задача не отменена автором. Исполнитель не может установить статус" +
+            " 'Создано' или 'Отменено'.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Статус задачи изменён",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ViewTaskDto.class))}),
             @ApiResponse(responseCode = "400", description = "Запрос составлен некорректно", content = @Content)
     })
-    @PatchMapping("/{taskId}/change-status")
+    @PatchMapping("/{taskId}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ViewTaskDto changeTaskStatus(@Parameter(description = "ID редактируемой задачи")
+    public ViewTaskDto updateTaskStatus(@Parameter(description = "ID обновляемой задачи")
                                         @PathVariable @Positive Integer taskId,
                                         @Parameter(description = "Новый статус задачи")
-                                        @RequestBody @Valid UpdateTaskStatusDto updateStatus,
+                                        @RequestParam TaskStatus status,
                                         @AuthenticationPrincipal User user) {
         log.info("Запрос на редактирование задачи по ID={}", taskId);
-        return taskService.changeTaskStatus(taskId, updateStatus);
+        return taskService.updateTaskStatus(taskId, user.getId(), status);
     }
 
     @Operation(summary = "Удаление задачи", description = "Пользователь может удалить задачу если он является её" +
@@ -103,7 +102,6 @@ public class TaskController {
         taskService.deleteTask(taskId, user.getId());
     }
 
-
     @Operation(summary = "Получение задачи по ID", description = "Авторизованный пользователь может запросить задачу по ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Задача найдена",
@@ -119,39 +117,31 @@ public class TaskController {
         return taskService.getTaskById(taskId);
     }
 
-    @Operation(summary = "Поиск задач по их исполнителю", description = "Поиск задач по их исполнителю и фильтрацией " +
-            "результатов поиска по статусу задач (по умолчанию в выборку попадут задачи с любым приоритетом)" +
-            " и пагинацией возвращаемых данных. Если по запросу не найдено ни одного события, возвращается пустой список")
+    @Operation(summary = "Поиск задач с возможностью фильтрации", description = "Поиск задач c фильтрацией результатов" +
+            " поиска по автору или исполнителю, по статусу задач (по умолчанию в выборку попадут задачи с любым" +
+            " приоритетом) и пагинацией возвращаемых данных. Если по запросу не найдено ни одного" +
+            " события, то возвращается пустой список")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Задачи найдены",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ViewTaskDto.class))}),
             @ApiResponse(responseCode = "400", description = "Запрос составлен некорректно", content = @Content)
     })
-    @GetMapping("/executor/{executorId}/search")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ViewTaskDto> getTaskByExecutorId(@PathVariable @Positive Integer executorId,
+    public List<ViewTaskDto> getTaskByExecutorId(@Parameter(description = "Указатель поиска по автору или исполнителю")
+                                                 @RequestParam(name = "aoe") AuthorOrExecutor authorOrExecutor,
+                                                 @Parameter(description = "ID автора или исполнителя задач")
+                                                 @RequestParam @Positive Integer userId,
+                                                 @Parameter(description = "Приоритет искомых задач")
                                                  @RequestParam(required = false) TaskPriority priority,
+                                                 @Parameter(description = "Количество элементов, которые нужно пропустить" +
+                                                         " для формирования текущего набора")
                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                 @Parameter(description = "количество элементов в наборе")
                                                  @RequestParam(defaultValue = "10") @Positive int size) {
-        return taskService.getTaskByExecutorId(executorId, priority, from, size);
-    }
-
-    @Operation(summary = "Поиск задач по их автору", description = "Поиск задач по их автору и фильтрацией " +
-            "результатов поиска по статусу задач (по умолчанию в выборку попадут задачи с любым приоритетом)" +
-            " и пагинацией возвращаемых данных. Если по запросу не найдено ни одного события, возвращается пустой список")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Задачи найдены",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ViewTaskDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Запрос составлен некорректно", content = @Content)
-    })
-    @GetMapping("/author/{authorId}/search")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ViewTaskDto> getTaskByAuthorId(@PathVariable @Positive Integer authorId,
-                                               @RequestParam(required = false) TaskPriority priority,
-                                               @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                               @RequestParam(defaultValue = "10") @Positive int size) {
-        return taskService.getTaskByAuthorId(authorId, priority, from, size);
+        log.info("Запрос списка задач с параметрами, поиск по:{} с ID={}, приоритет: {}, from={}, size={}",
+                authorOrExecutor, userId, priority, from, size);
+        return taskService.searchTasks(authorOrExecutor, userId, priority, from, size);
     }
 }

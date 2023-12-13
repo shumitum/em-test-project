@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 description = "Documentation \"Task Management System API\" v1.0"),
 
         security = @SecurityRequirement(
-                name = "bearerAuth"),
+                name = "Bearer Authentication"),
 
         servers = @Server(
                 description = "Test Server",
@@ -24,8 +24,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
 )
 
 @SecurityScheme(
-        name = "bearerAuth",
-        description = "JWT auth description",
+        name = "Bearer Authentication",
+        description = "A JWT token is required to access this API",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
