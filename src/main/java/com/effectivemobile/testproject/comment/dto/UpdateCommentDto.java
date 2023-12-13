@@ -1,6 +1,6 @@
 package com.effectivemobile.testproject.comment.dto;
 
-import jakarta.persistence.Entity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Обновленный текст комментария")
 public class UpdateCommentDto {
 
     @NotBlank
     @Size(max = 1000)
+    @Schema(description = "Обновленный текст комментария", example = "Новый текст комментария")
     private String text;
 }

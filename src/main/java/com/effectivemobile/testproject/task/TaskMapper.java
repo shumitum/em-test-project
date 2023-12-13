@@ -10,4 +10,6 @@ public interface TaskMapper {
     ViewTaskDto toViewTaskDto(Task task);
 
     Task toTask(CreateTaskDto createTaskDto);
+
+    Task toTask(ViewTaskDto viewTaskDto);
 }

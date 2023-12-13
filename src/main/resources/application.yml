@@ -1,9 +1,12 @@
 server:
-  port:8080
+  port: 8080
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+    #url: ${SPRING_DATASOURCE_URL}
+    #username: ${POSTGRES_USER}
+    #password: ${POSTGRES_PASSWORD}
     url: jdbc:postgresql://localhost:5432/ewm_main
     username: postgres
     password: postgres
@@ -18,6 +21,9 @@ spring:
   sql:
     init:
       mode: always
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
 
 jwt:
   secret-key: 99erg1df9bi034rge9ug0342p4j3v3j34gr35frd32gf324t2423edv56h4e

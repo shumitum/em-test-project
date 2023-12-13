@@ -16,12 +16,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import static com.effectivemobile.testproject.utility.Constant.DATE_TIME_PATTERN;
+
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException exc, HttpServletRequest request) {
@@ -95,8 +94,7 @@ public class ErrorHandler {
                 .build();
     }
 
-
-/*    @ExceptionHandler
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception exc, HttpServletRequest request) {
         log.warn("Получен статус 500 INTERNAL SERVER ERROR {}", exc.getMessage());
@@ -106,28 +104,5 @@ public class ErrorHandler {
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
                 .build();
-    }*/
-
-/*
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
-        log.warn("Получен статус 403 FORBIDDEN {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
     }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidArgumentException(final InvalidArgumentException e) {
-        log.warn("Получен статус 400 BAD REQUEST {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler({DataIntegrityViolationException.class, TimeValidationException.class, ConflictException.class})
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleTimeValidationException(final Exception e) {
-        log.warn("Получен статус 409 CONFLICT {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }*/
 }

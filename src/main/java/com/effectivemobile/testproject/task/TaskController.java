@@ -60,7 +60,7 @@ public class TaskController {
     @PatchMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public ViewTaskDto updateTask(@Parameter(description = "ID обновляемой задачи")
-                                  @PathVariable @Positive Integer taskId,
+                                  @PathVariable("taskId") @Positive Integer taskId,
                                   @RequestBody @Valid UpdateTaskDto updateTaskDto,
                                   @AuthenticationPrincipal User user) {
         log.info("Запрос на редактирование задачи по ID={}", taskId);
@@ -79,16 +79,16 @@ public class TaskController {
     @PatchMapping("/{taskId}/status")
     @ResponseStatus(HttpStatus.OK)
     public ViewTaskDto updateTaskStatus(@Parameter(description = "ID обновляемой задачи")
-                                        @PathVariable @Positive Integer taskId,
+                                        @PathVariable("taskId") @Positive Integer taskId,
                                         @Parameter(description = "Новый статус задачи")
-                                        @RequestParam TaskStatus status,
+                                        @RequestParam("status") TaskStatus status,
                                         @AuthenticationPrincipal User user) {
         log.info("Запрос на редактирование задачи по ID={}", taskId);
         return taskService.updateTaskStatus(taskId, user.getId(), status);
     }
 
     @Operation(summary = "Удаление задачи", description = "Пользователь может удалить задачу если он является её" +
-            " владельцем, и задача находится в статусе создана или завершена.")
+            " автором, и задача находится в статусе создана или завершена.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Задача удалена"),
             @ApiResponse(responseCode = "400", description = "Запрос составлен некорректно", content = @Content)
@@ -96,7 +96,7 @@ public class TaskController {
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTask(@Parameter(description = "ID удаляемой задачи")
-                           @PathVariable @Positive Integer taskId,
+                           @PathVariable("taskId") @Positive Integer taskId,
                            @AuthenticationPrincipal User user) {
         log.info("Запрос на удаление задачи по ID={}", taskId);
         taskService.deleteTask(taskId, user.getId());
@@ -112,7 +112,7 @@ public class TaskController {
     @GetMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public ViewTaskDto getTaskById(@Parameter(description = "ID запрашиваемой задачи")
-                                   @PathVariable @Positive Integer taskId) {
+                                   @PathVariable("taskId") @Positive Integer taskId) {
         log.info("Запрос задачи по ID={}", taskId);
         return taskService.getTaskById(taskId);
     }
@@ -130,16 +130,16 @@ public class TaskController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ViewTaskDto> getTaskByExecutorId(@Parameter(description = "Указатель поиска по автору или исполнителю")
-                                                 @RequestParam(name = "aoe") AuthorOrExecutor authorOrExecutor,
+                                                 @RequestParam("aore") AuthorOrExecutor authorOrExecutor,
                                                  @Parameter(description = "ID автора или исполнителя задач")
-                                                 @RequestParam @Positive Integer userId,
+                                                 @RequestParam("userId") @Positive Integer userId,
                                                  @Parameter(description = "Приоритет искомых задач")
-                                                 @RequestParam(required = false) TaskPriority priority,
+                                                 @RequestParam(name = "priority", required = false) TaskPriority priority,
                                                  @Parameter(description = "Количество элементов, которые нужно пропустить" +
                                                          " для формирования текущего набора")
-                                                 @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                 @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
                                                  @Parameter(description = "количество элементов в наборе")
-                                                 @RequestParam(defaultValue = "10") @Positive int size) {
+                                                 @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
         log.info("Запрос списка задач с параметрами, поиск по:{} с ID={}, приоритет: {}, from={}, size={}",
                 authorOrExecutor, userId, priority, from, size);
         return taskService.searchTasks(authorOrExecutor, userId, priority, from, size);

@@ -1,5 +1,6 @@
 package com.effectivemobile.testproject.comment;
 
+import com.effectivemobile.testproject.task.Task;
 import com.effectivemobile.testproject.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +27,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "user_id")
     private User author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", referencedColumnName = "task_id")
+    private Task task;
 
     @Builder.Default
     @Column(name = "created")
