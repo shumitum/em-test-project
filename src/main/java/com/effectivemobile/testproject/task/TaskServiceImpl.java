@@ -153,7 +153,7 @@ public class TaskServiceImpl implements TaskService {
                 .toList();
     }
 
-    private Task findTaskById(Integer taskId) {
+    public Task findTaskById(Integer taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new NoSuchElementException(String.format("Задачи с ID=%d не существует", taskId)));
     }

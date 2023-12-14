@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    private Comment findCommentById(Integer commentId) {
+    public Comment findCommentById(Integer commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new NoSuchElementException(String.format("Комментария с ID=%d не существует", commentId)));
     }
