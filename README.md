@@ -22,4 +22,4 @@ docker-compose up
 ####  Проверка работы
 Swagger UI для проверки работы API будет доступен по ссылке http://localhost:8080/swagger-ui/index.html
 
- Отдельно OPEN-API спецификация в формате JSON доступна по [ссылке]().
+ Отдельно OPEN-API спецификация в формате JSON доступна по [ссылке](https://github.com/shumitum/em-test-project/tree/main/docs).
