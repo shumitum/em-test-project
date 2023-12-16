@@ -32,7 +32,6 @@ public class User implements UserDetails {
     @Column(name = "name")
     private String name;
 
-    @Size(max = 30)
     @Enumerated(EnumType.STRING)
     @Column(name = "position")
     private UserPosition userPosition;
