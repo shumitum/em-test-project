@@ -57,7 +57,7 @@ class TaskControllerTest {
 
     @Test
     @SneakyThrows
-    void createTask() {
+    void createTask_whenInvokeWithValidDto_thenReturnCreateStatus() {
         mockMvc.perform(post("/tasks")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(createTaskDto)))
@@ -66,7 +66,7 @@ class TaskControllerTest {
 
     @Test
     @SneakyThrows
-    void updateTask() {
+    void updateTask_whenInvokeWithValidDto_thenReturnOkStatus() {
         mockMvc.perform(patch("/tasks/{taskId}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(updateTaskDto)))
@@ -75,7 +75,7 @@ class TaskControllerTest {
 
     @Test
     @SneakyThrows
-    void updateTaskStatus() {
+    void updateTaskStatus_whenInvokeWithCorrectStatus_thenReturnOkStatus() {
         mockMvc.perform(patch("/tasks/{taskId}/status", 1)
                         .param("status", "IN_PROGRESS"))
                 .andExpect(status().isOk());
@@ -83,21 +83,21 @@ class TaskControllerTest {
 
     @Test
     @SneakyThrows
-    void deleteTask() {
+    void deleteTask_whenInvokeWithCorrectId_thenReturnNoContentStatus() {
         mockMvc.perform(delete("/tasks/{taskId}", 1))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @SneakyThrows
-    void getTaskById() {
+    void getTaskById_whenInvokeWithCorrectTaskId_thenReturnOkStatus() {
         mockMvc.perform(get("/tasks/{taskId}", 1))
                 .andExpect(status().isOk());
     }
 
     @Test
     @SneakyThrows
-    void getTaskByExecutorId() {
+    void getTaskByExecutorId_whenInvoke_returnOkStatus() {
         mockMvc.perform(get("/tasks/search")
                         .param("aore", "AUTHOR")
                         .param("userId", "1")

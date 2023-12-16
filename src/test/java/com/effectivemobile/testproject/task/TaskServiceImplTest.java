@@ -86,7 +86,7 @@ class TaskServiceImplTest {
     }
 
     @Test
-    void createTask() {
+    void createTask_whenInvokeWithValidDto_thenCreateNewTask() {
         when(taskMapper.toViewTaskDto(any())).thenReturn(viewTaskDto);
         when(taskMapper.toTask(createTaskDto)).thenReturn(task);
         when(userService.getUserById(anyInt())).thenReturn(user);
@@ -107,7 +107,7 @@ class TaskServiceImplTest {
     }
 
     @Test
-    void getTaskById() {
+    void getTaskById_whenInvokeWithCorrectTaskId_thenReturnTask() {
         when(taskRepository.findById(anyInt())).thenReturn(Optional.of(task));
         when(taskMapper.toViewTaskDto(any())).thenReturn(viewTaskDto);
 

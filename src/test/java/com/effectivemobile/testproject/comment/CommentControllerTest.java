@@ -117,7 +117,7 @@ class CommentControllerTest {
 
     @Test
     @SneakyThrows
-    void getCommentsByTaskId() {
+    void getCommentsByTaskId_whenInvoke_thenReturnOkStatusWithListOfComments() {
         List<ViewCommentDto> comments = List.of(new ViewCommentDto());
         when(commentService.getCommentsByTaskId(1, 0, 10))
                 .thenReturn(comments);

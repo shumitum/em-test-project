@@ -113,7 +113,7 @@ class CommentServiceImplTest {
     }
 
     @Test
-    void getCommentsByTaskId() {
+    void getCommentsByTaskId_whenInvokeWithCorrectTaskId_thenReturnListOfComments() {
         when(commentRepository.findCommentsByTaskIdOrderByCreated(anyInt(), any()))
                 .thenReturn(List.of(comment));
         when(commentMapper.toViewCommentDto(any())).thenReturn(viewCommentDto);
