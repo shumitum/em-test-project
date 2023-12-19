@@ -1,7 +1,6 @@
 package com.effectivemobile.testproject.task;
 
 import com.effectivemobile.testproject.user.User;
-import com.effectivemobile.testproject.validationgroup.Update;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,12 +32,12 @@ public class Task {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    @NotNull(groups = Update.class)
+    @NotNull
     private TaskStatus taskStatus = TaskStatus.CREATED;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority")
-    @NotNull(groups = Update.class)
+    @NotNull
     private TaskPriority taskPriority;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -78,7 +78,7 @@ class TaskRepositoryTest {
     @Test
     @Rollback
     void searchTasksByAuthor_whenInvokeWithValidAuthorId_thenReturnListWithOneTask() {
-        List<Task> tasks = taskRepository.searchTasksByAuthor(author.getId(), null, PageParam.of(0, 5));
+        List<Task> tasks = taskRepository.searchTasksByAuthorOrderById(author.getId(), null, PageParam.of(0, 5));
 
         assertEquals(1, tasks.size());
         assertEquals(task.getId(), tasks.get(0).getId());
@@ -88,7 +88,7 @@ class TaskRepositoryTest {
     @Test
     @Rollback
     void searchTasksByAuthor_whenInvokeWithWrongAuthorId_thenReturnEmptyList() {
-        List<Task> tasks = taskRepository.searchTasksByAuthor(author.getId() + 5, null, PageParam.of(0, 5));
+        List<Task> tasks = taskRepository.searchTasksByAuthorOrderById(author.getId() + 5, null, PageParam.of(0, 5));
 
         assertEquals(0, tasks.size());
     }
@@ -96,7 +96,7 @@ class TaskRepositoryTest {
     @Test
     @Rollback
     void searchTasksByExecutor_whenInvokeWithValidExecutorId_thenReturnListWithOneTask() {
-        List<Task> tasks = taskRepository.searchTasksByExecutor(executor.getId(), null, PageParam.of(0, 5));
+        List<Task> tasks = taskRepository.searchTasksByExecutorOrderById(executor.getId(), null, PageParam.of(0, 5));
 
         assertEquals(1, tasks.size());
         assertEquals(task.getId(), tasks.get(0).getId());
@@ -106,7 +106,7 @@ class TaskRepositoryTest {
     @Test
     @Rollback
     void searchTasksByExecutor_whenInvokeWithWrongExecutorId_thenReturnEmptyList() {
-        List<Task> tasks = taskRepository.searchTasksByExecutor(executor.getId() + 5, null, PageParam.of(0, 5));
+        List<Task> tasks = taskRepository.searchTasksByExecutorOrderById(executor.getId() + 5, null, PageParam.of(0, 5));
 
         assertEquals(0, tasks.size());
     }

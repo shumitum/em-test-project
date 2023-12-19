@@ -144,9 +144,9 @@ public class TaskServiceImpl implements TaskService {
         userService.checkUserExistence(userId);
         List<Task> tasks = Collections.emptyList();
         if (authorOrExecutor.equals(AuthorOrExecutor.EXECUTOR)) {
-            tasks = taskRepository.searchTasksByExecutor(userId, priority, PageParam.of(from, size));
+            tasks = taskRepository.searchTasksByExecutorOrderById(userId, priority, PageParam.of(from, size));
         } else if (authorOrExecutor.equals(AuthorOrExecutor.AUTHOR)) {
-            tasks = taskRepository.searchTasksByAuthor(userId, priority, PageParam.of(from, size));
+            tasks = taskRepository.searchTasksByAuthorOrderById(userId, priority, PageParam.of(from, size));
         }
         return tasks.stream()
                 .map(taskMapper::toViewTaskDto)
