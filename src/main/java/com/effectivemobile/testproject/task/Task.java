@@ -4,12 +4,12 @@ import com.effectivemobile.testproject.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.Objects;
+
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -47,4 +47,23 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "executor_id", referencedColumnName = "user_id")
     private User executor;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id)
+                && Objects.equals(header, task.header)
+                && Objects.equals(description, task.description)
+                && taskStatus == task.taskStatus
+                && taskPriority == task.taskPriority
+                && Objects.equals(author, task.author)
+                && Objects.equals(executor, task.executor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, header, description, taskStatus, taskPriority, author, executor);
+    }
 }

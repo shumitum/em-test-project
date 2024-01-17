@@ -20,7 +20,7 @@ public class TestProjectApplication {
     ) {
         return args -> {
             AuthRequest userRequest = AuthRequest.builder()
-                    .email("mail@mail.com")
+                    .email("user@user.com")
                     .password("123456")
                     .build();
             System.out.println("AUTHORIZATION TOKEN: " + authService.authenticate(userRequest).getToken());
